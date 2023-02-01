@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bennix <bennix@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/28 19:07:50 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/01 14:59:01 by bennix           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
 void    pipex(int fd1, char* cmd1, char* cmd2, int fd2) // for child processes / char *cmd1, outs put it to parent as input pipe to char *cmd2, to finish 
