@@ -1,6 +1,3 @@
-# Created by https://www.toptal.com/developers/gitignore/api/c,windows,linux,macos,vim,nanoc
-# Edit at https://www.toptal.com/developers/gitignore?templates=c,windows,linux,macos,vim,nanoc
-
 ### C ###
 # Prerequisites
 *.d
@@ -160,5 +157,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# End of https://www.toptal.com/developers/gitignore/api/c,windows,linux,macos,vim,nanoc
