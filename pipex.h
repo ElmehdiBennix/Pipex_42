@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 19:05:38 by ebennix           #+#    #+#             */
-/*   Updated: 2023/01/31 00:24:48 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/06 22:33:13 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <fcntl.h>
 
 void    pipex(int fd1, char *cmd1, char *cmd2, int fd2);
-
 
 
 #endif
