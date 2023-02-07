@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:28 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/06 21:17:47 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/07 01:47:06 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int main (int ac , char **av , char **env) // 0 for a.out next for next in exec
         perror("Error opening W/R files");
         return 1;
     }
-    execve();
-    pipex(fd[0],,,fd[1]);
+    // execve();
+    // pipex(fd[0],,,fd[1]);
     return 0;
 }

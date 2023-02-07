@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/07 00:34:42 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/07 01:32:13 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,66 +66,61 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-// char** ft_split(char *s, char c) {
-//     char **str;
-//     int word = 0;
-//     int i = 0, j = 0;
+char** ft_split(char *s, char c) {
+    char **str;
+    int word = 0;
+    int i = 0;
+    char *p;
     
-//     while (s[i] != '\0')
-// 	{
-// 		while (s[i] == c)
-// 			i++;
-// 		if (s[i] != '\0')
-// 		{
-// 			while (s[i] != '\0' && s[i] != c)
-// 				i++;
-// 			word++;
-// 		}
-// 	}
-//     str = (char **)malloc((word + 1) * sizeof(char *));
-    
-//     i = 0;
-//     j = 0;
-    
-//     while (s[i] < word)
-//     {
-        
-//     }
-//     // while (*s) 
-//     // {
-//     //     if (*s == c) 
-//     //     {
-//     //         str[word] = s - i;
-//     //         *s = '\0';
-//     //         word++;
-//     //         s++;
-//     //         i = 0;
-//     //     } 
-//     //     else 
-//     //     {
-//     //         i++;
-//     //         s++;
-//     //     }
-//     // }
-//     // str[word] = s - i;
-//     word++;
-//     str[word] = NULL;   
-//     return str;
-// }
-// int main ()
-// {
-//     int i =0;
-//     char* str = "PATH=/Users/ebennix/goinfre/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Applications/Visual Studio Code.app/Contents/Resources/app/bin";
-//     char** res = ft_split(str,':');
-//     while(1)
-//     {
-//         printf("%s\n",res[i]);
-//         i++;
-//         if (res[i]== NULL)
-//             break;
-//     }
-//     printf("\n%s",str);
-// }
+    while (s[i] != '\0')
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i] != '\0')
+		{
+			while (s[i] != '\0' && s[i] != c)
+				i++;
+			word++;
+		}
+	}
+    str = (char **)malloc((word + 1) * sizeof(char *));
+
+    i=0,word = 0;
+    p = s ;
+    while (*p)
+    {
+        if(*p == c)
+        {
+            str[word]= p - i;
+            *p = '\0';
+            word++;
+            p++;
+            i=0;
+        }
+        else
+        {
+            i++;
+            p++;   
+        }
+    }
+    str[word] = NULL;
+    return str;
+}
+int main ()
+{
+    int i =0;
+    char* tmpstr = "PATH=/Users/ebennix/goinfre/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Applications/Visual Studio Code.app/Contents/Resources/app/bin";
+    char* str = tmpstr + 5 ;
+    char** res = ft_split(str,':');
+    while(1)
+    {
+        printf("%s\n",res[i]);
+        i++;
+        if (res[i]== NULL)
+            break;
+    }
+    printf("\n%s",str);
+}
 // int main()
 // {
 //     char *str = "this is me";
