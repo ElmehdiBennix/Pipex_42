@@ -5,113 +5,95 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 01:02:26 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 15:18:10 by ebennix          ###   ########.fr       */
+/*   Created: 2023/02/08 20:52:56 by ebennix           #+#    #+#             */
+/*   Updated: 2023/02/08 21:09:35 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "pipex.h"
 
-size_t ft_strlen(const char *str)
+int	count_words(char *str, char c)
 {
-    size_t i = 0;
-    
-    if(str == NULL || str[i] == '\0') {
-        return 0 ;
-    }else{
-        while (str[i] != '\0')
-            i++;
-        return i ;
-    }
+	int		count;
+
+	count = 0;
+	while (*str)
+	{
+		while (*str && *str == c)
+			str++;
+		if (*str && *str != c)
+		{
+			count++;
+			while (*str && *str != c)
+				str++;
+		}
+	}
+	return (count);
 }
 
-static char *ft_strdup(const char *s)
+char	**ft_free(char **str)
 {
-    size_t i = 0;
-    char *str;
-    
-    str=(char *)malloc((ft_strlen(s)+1)*sizeof(char));
-    if (!str)
-        return NULL;
-    while (s[i])
-    {
-        str[i]=s[i];
-        i++;
-    }
-    str[i]='\0';
-    return str;
+	char	*tab;
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		tab = str[i];
+		free(tab);
+		i++;
+	}
+	free(str);
+	str = NULL;
+	return (0);
 }
 
-char** ft_split(const char *str, char c)
+char	*malloc_word(char *str, char c)
 {
-    char **res;
-    char *tmp = ft_strdup(str);
-    char *p = tmp;
-    int i;
-    int word = 0;
+	char	*word;
+	int		i;
 
-    while (*p) 
-    {
-        while (*p == c)
-            p++;
-        if(*p)
-        {
-            while (*p != '\0' && *p != c) 
-                p++;
-            word++;
-        }
-    } 
-    res = (char **)malloc((word + 1) * sizeof(char *));
-    //if() must add protection
-    i = 0;
-    word = 0;
-    p = tmp;
-    while (*p)
-    {
-        while (*p == c)
-            p++;
-        if (*p)
-        {
-            while (*p && *p != c)
-            {
-                i++;
-                p++;
-            }
-            res[word] = p - i;
-            *p = '\0';
-            word++;
-            p++;
-            i=0;
-        }
-    }
-    free(tmp);
-    res[word] = NULL;
-    return res;
+	i = 0;
+	while (str[i] && str[i] != c)
+		i++;
+	word = (char *)malloc(sizeof(char) * (i + 1));
+	if (!word)
+		return (NULL);
+	i = 0;
+	while (str[i] && str[i] != c)
+	{
+		word[i] = str[i];
+		i++;
+	}
+	word[i] = '\0';
+	return (word);
 }
 
-int main() 
+char	**ft_split(char *s, char c)
 {
-    char *str1 ;
-    str1 = ",,,hello,,world,and,fellow,,cowboyz,,,";
-    char *str ;
-    str = ",,,hello,,world,and,fellow,,cowboyz,,,";
-    char **res = ft_split(str,',');
-     char **res2 = ft_split(str,',');
-    int i = 0;
-    while(res[i])
-    {
-        printf("%s\n",res[i]);
-        i++;
-    }
-    printf("%s\n",res[i]);
-    i = 0;
-    while(res2[i])
-    {
-        printf("%s\n",res2[i]);
-        i++;
-    }
-    printf("%s\n",res2[i]);
+	char	**tab;
+	int		i;
 
+	if (!s)
+		return (NULL);
+	tab = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
+	if (!tab)
+		return (NULL);
+	i = 0;
+	while (*s)
+	{
+		while (*s && *s == c)
+			s++;
+		if (*s && *s != c)
+		{
+			tab[i] = malloc_word(s, c);
+			if (tab[i] == NULL)
+				return (ft_free(tab));
+			i++;
+			while (*s && *s != c)
+				s++;
+		}
+	}
+	tab[i] = NULL;
+	return (tab);
 }
