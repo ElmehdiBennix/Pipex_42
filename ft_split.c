@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 01:02:26 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 15:10:48 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 15:18:10 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int main()
         printf("%s\n",res[i]);
         i++;
     }
-    printf("%s",res[i]);
+    printf("%s\n",res[i]);
     i = 0;
     while(res2[i])
     {

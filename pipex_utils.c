@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 14:54:51 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 15:37:26 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,49 +68,49 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char** ft_split(const char *str, char c)
-{
-    char **res;
-    char *tmp = ft_strdup(str);
-    char *p = tmp;
-    int i;
-    int word = 0;
+// char** ft_split(const char *str, char c)
+// {
+//     char **res;
+//     char *tmp = ft_strdup(str);
+//     char *p = tmp;
+//     int i;
+//     int word = 0;
 
-    while (*p) 
-    {
-        while (*p == c)
-            p++;
-        if(*p)
-        {
-            while (*p != '\0' && *p != c) 
-                p++;
-            word++;
-        }
-    } 
-    res = (char **)malloc((word + 1) * sizeof(char *));
-    //if() must add protection
-    i = 0;
-    word = 0;
-    p = tmp;
-    while (*p)
-    {
-        while (*p == c)
-            p++;
-        if (*p)
-        {
-            while (*p && *p != c)
-            {
-                i++;
-                p++;
-            }
-            res[word] = p - i;
-            *p = '\0';
-            word++;
-            p++;
-            i=0;
-        }
-    }
-    free(tmp);
-    res[word] = NULL;
-    return res;
-}
+//     while (*p) 
+//     {
+//         while (*p == c)
+//             p++;
+//         if(*p)
+//         {
+//             while (*p != '\0' && *p != c) 
+//                 p++;
+//             word++;
+//         }
+//     } 
+//     res = (char **)malloc((word + 1) * sizeof(char *));
+//     //if() must add protection
+//     i = 0;
+//     word = 0;
+//     p = tmp;
+//     while (*p)
+//     {
+//         while (*p == c)
+//             p++;
+//         if (*p)
+//         {
+//             while (*p && *p != c)
+//             {
+//                 i++;
+//                 p++;
+//             }
+//             res[word] = p - i;
+//             *p = '\0';
+//             word++;
+//             p++;
+//             i=0;
+//         }
+//     }
+//     free(tmp);
+//     res[word] = NULL;
+//     return res;
+// }
