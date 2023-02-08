@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 10:33:51 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 10:35:51 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,21 +113,4 @@ char** ft_split(const char *str, char delimiter)
     free(tmp);
     result[count] = NULL;
     return result;
-}
-
-int main() 
-{
-    char *str = ",,,hello,,world,and,fellow,,cowboyz,,,";
-    char **res = ft_split(str,',');
-    int i = 0;
-    while(res[i])
-    {
-        printf("%s\n",res[i]);
-        i++;
-    }
-    printf("%s",res[i++]);
-    while (1){
-        // leaks check 
-        // fixed
-    }
 }
