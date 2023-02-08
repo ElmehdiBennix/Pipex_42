@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 01:02:26 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 10:35:37 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 10:50:16 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,51 +31,51 @@ char *ft_strdup(const char *s)
     return str;
 }
 
-char** ft_split(const char *str, char delimiter)
+char** ft_split(const char *str, char c)
 {
+    char **res;
     char *tmp = ft_strdup(str);
     char *p = tmp;
-    char **result;
-    int count = 0;
     int i;
+    int word = 0;
 
     while (*p) 
     {
-        while (*p == delimiter)
+        while (*p == c)
             p++;
         if(*p)
         {
-            while (*p != '\0' && *p != delimiter) 
+            while (*p != '\0' && *p != c) 
                 p++;
-            count++;
+            word++;
         }
     } 
-    result = (char **)malloc((count + 1) * sizeof(char *));
+    res = (char **)malloc((word + 1) * sizeof(char *));
     //if() must add protection
     i = 0;
-    count = 0;
+    word = 0;
     p = tmp;
     while (*p)
     {
-        while (*p == delimiter)
+        while (*p == c)
             p++;
         if (*p)
         {
-            while (*p && *p != delimiter)
+            while (*p && *p != c)
             {
                 i++;
                 p++;
             }
-            result[count] = p - i;
+            res[word] = p - i;
             *p = '\0';
-            count++;
+            word++;
             p++;
             i=0;
         }
     }
     free(tmp);
-    result[count] = NULL;
-    return result;
+    res[word] = NULL;
+    return res;
 }
 
 int main() 
