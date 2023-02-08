@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 01:02:26 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/07 02:24:45 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 10:04:36 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-char** split(const char *str, char delimiter)
+char** ft_split(const char *str, char delimiter)
 {
-    char *p = strdup(str);
+    char *p = ft_strdup(str);
     char **result;
     int count = 0;
     int i;
@@ -36,39 +36,38 @@ char** split(const char *str, char delimiter)
 
     i = 0;
     count = 0;
-    p = strdup(str);
+    p = ft_strdup(str);
     while (*p)
     {
         while (*p == delimiter)
             p++;
         if (*p)
         {
-            while (*p == '\0' && *p != delimiter)
+            while (*p && *p != delimiter)
             {
                 i++;
                 p++;
             }
-            result[count] = strdup(p - i);
+            result[count] = p - i;
+            *p = '\0';
             count++;
             p++;
-            i = 0;
+            i=0;
         }
     }
     result[count] = NULL;
     return result;
 }
 
-int main() {
-  char **tokens;
-  char *string = ",,,,,,,,hello,,,,world,f,,,,,oo,,bar,,,,,,,";
-  char delimiter = ',';
-
-  tokens = split(string, delimiter);
-
-  for (int i = 0; tokens[i]; i++) {
-    printf("%s\n", tokens[i]);
-  }
-  free(tokens);
-
-  return 0;
+int main() 
+{
+    char *str = ",,,hello,,world,f,oo,,bar,,,";
+    char **res = ft_split(str,',');
+    int i = 0;
+    while(res[i])
+    {
+        printf("%s",res[i]);
+        i++;
+    }
+    return 0;
 }
