@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 10:48:58 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 14:54:51 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 char** ft_split(const char *str, char c)
 {
+    char **res;
     char *tmp = ft_strdup(str);
     char *p = tmp;
-    char **res;
-    int word = 0;
     int i;
+    int word = 0;
 
     while (*p) 
     {

@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 01:02:26 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 10:50:16 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/08 15:10:48 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *ft_strdup(const char *s)
+size_t ft_strlen(const char *str)
+{
+    size_t i = 0;
+    
+    if(str == NULL || str[i] == '\0') {
+        return 0 ;
+    }else{
+        while (str[i] != '\0')
+            i++;
+        return i ;
+    }
+}
+
+static char *ft_strdup(const char *s)
 {
     size_t i = 0;
     char *str;
@@ -80,17 +93,25 @@ char** ft_split(const char *str, char c)
 
 int main() 
 {
-    char *str = ",,,hello,,world,and,fellow,,cowboyz,,,";
+    char *str1 ;
+    str1 = ",,,hello,,world,and,fellow,,cowboyz,,,";
+    char *str ;
+    str = ",,,hello,,world,and,fellow,,cowboyz,,,";
     char **res = ft_split(str,',');
+     char **res2 = ft_split(str,',');
     int i = 0;
     while(res[i])
     {
         printf("%s\n",res[i]);
         i++;
     }
-    printf("%s",res[i++]);
-    while (1){
-        // leaks check 
-        // fixed
+    printf("%s",res[i]);
+    i = 0;
+    while(res2[i])
+    {
+        printf("%s\n",res2[i]);
+        i++;
     }
+    printf("%s\n",res2[i]);
+
 }
