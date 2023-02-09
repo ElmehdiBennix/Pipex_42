@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bennix <bennix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 20:52:56 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/08 21:09:35 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/09 21:23:03 by bennix           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,20 @@ char	**ft_split(char *s, char c)
 	}
 	tab[i] = NULL;
 	return (tab);
+} 
+/*
+int main(void)
+{
+	char **splitted;
+	char  *mamsplitich = "hello       world        hhhhh      bennix      zaml";
+	int i = 0;
+
+	splitted = ft_split(mamsplitich, ' ');
+	while(splitted[i])
+	{
+		printf("%s\n", splitted[i]);
+		i++;
+	}
+	printf("%s",splitted[i]);
 }
+*/

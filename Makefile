@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
+#    By: bennix <bennix@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/06 21:17:22 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/09 17:04:50 by bennix           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,8 +33,7 @@ all :$(NAME)
 
 $(NAME):$(OBJ)
 	$(cc) $(OBJ) -o $(NAME)
-#$(cc) $(OBJ) main.c -o $(NAME) 
-
+#$(cc) $(OBJ) main.c -o $(NAME)
 
 %.o : $(SRC) $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
