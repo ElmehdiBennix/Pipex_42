@@ -3,43 +3,40 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bennix <bennix@student.42.fr>              +#+  +:+       +#+         #
+#    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/09 17:04:50 by bennix           ###   ########.fr        #
+#    Updated: 2023/02/09 22:08:57 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-AR_NAME := pipex.a
 NAME := pipex
 
 CC := gcc
+
 CFLAGS := -g -Wall -Wextra -Werror
 
 HEADER := pipex.h
+
 FILES := pipex /
 		pipex_utils /
+		ft_split /
 
 
 SRC := $(FILES:=.c)
 OBJ:= $(SRC:.c=.o)
 
-
-AR := ar -rc
 RM := rm -rf
-
 
 all :$(NAME)
 
 $(NAME):$(OBJ)
 	$(cc) $(OBJ) -o $(NAME)
-#$(cc) $(OBJ) main.c -o $(NAME)
+	
+#main:
 
 %.o : $(SRC) $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
-
-ar : $(OBJ)
-	$(AR) $(AR_NAME) $(OBJ)
 
 clean :
 	$(RM) $(OBJ)
@@ -48,5 +45,10 @@ fclean :
 	$(RM) $(NAME)
 
 re : fclean all
+
+#git : 
+#	git add .
+#	git commit -m "MakefileAutoPush"
+#	git push
 	
 .PHONY : clean fclean re

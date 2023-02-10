@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bennix <bennix@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 19:05:38 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/09 17:44:11 by bennix           ###   ########.fr       */
+/*   Updated: 2023/02/09 23:52:49 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-void    pipex(int fd1, char* cmd1, char* cmd2, int fd2 , char* path);
 size_t  ft_strlen(const char *str);
 char    *ft_strdup(const char *s);
 char    *ft_strjoin(char const *s1, char const *s2);
 char    **ft_split(char *s, char c);
-int ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char    *parsing(char **env);
+int     child_proc(int fd1 , char* cmd1 , char** path);
+int     parent_proc(int fd2 , char* cmd2 , char** path);
+void    pipex(int fd1, char* cmd1, char* cmd2, int fd2 , char **env);
 
 #endif

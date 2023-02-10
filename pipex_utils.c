@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bennix <bennix@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/09 18:14:47 by bennix           ###   ########.fr       */
+/*   Updated: 2023/02/09 23:16:27 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,44 +68,46 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	char	*sub;
 	size_t	i;
 	size_t	j;
-	size_t	l;
 
-	j = 0;
 	i = 0;
-	if (!s)
-		return (NULL);
-	l = ft_strlen(s);
-	if (start > l)
-		return (ft_strdup(""));
-	if (len >= l - start)
-		len = l - start;
-	sub = (char *)malloc(sizeof(char) * len + 1);
-	if (!sub)
-		return (NULL);
-	while (s[i] && len)
+	if (!needle[0])
+		return ((char *)haystack);
+	while (haystack[i] && i < len)
 	{
-		sub[j++] = s[start + i++];
-		len--;
-	}
-	sub[j] = '\0';
-	return (sub);
-}
-
-int main (char** env)
-{
-	int i = 0 ;
-
-	char * path ;
-	char * env ;
-	while(env[i] != '\0')
-	{
-		path = ft_substr(env[i],5,ft_strlen("PATH="));
+		j = 0;
+		if (haystack[i] == needle[0])
+		{
+			while (haystack[i + j] && needle[j] && haystack[i + j] == needle[j]
+				&& i + j < len)
+					j++;
+			if (!needle[j])
+				return ((char *)&haystack[i]);
+		}
 		i++;
 	}
-	printf("%s",path);
+	return (NULL);
 }
+
+// char *pars(char **env)
+// {
+// 	int i = 0 ;
+
+// 	char * path ;
+// 	while(env[i] != '\0' && path == NULL)
+// 	{
+// 		path = ft_strnstr(env[i],"PATH=",5); // can use ft_strlen("PATH=") in the 3 parameter for lazy work but since its fixed i could just put 5
+// 		i++;
+// 	}
+// 	return(path);
+// }
+
+// int main (int ac ,char **av,char **env)
+// {
+// 	char * pathfr = pars(env);
+	
+// 	printf("%s",pathfr);
+// }
