@@ -66,7 +66,6 @@ void    pipex(int fd1, char* cmd1, char* cmd2, int fd2 , char **env)
     // for process to child and parrent split the tasks so that the input for the child finishes as input for the parent to finish to simulate a pipe 
     //note -- wait for child to finish the exec
     int err;
-    int x;
     char * penv = parsing(env);
     char ** path = ft_split(penv,':');
     pid_t pid = fork();
@@ -81,9 +80,7 @@ void    pipex(int fd1, char* cmd1, char* cmd2, int fd2 , char **env)
     }
     else
     {
-        
-        wait(NULL);
-        // wait for child procc to finish 
+        wait(NULL); // pass var to check for errors
         // tqke a look at the acces function 
         err = parent_proc(fd2,cmd2,path);
         if (err < 0)
