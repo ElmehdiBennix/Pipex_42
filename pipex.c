@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/10 19:54:45 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/10 21:40:38 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@ int main (int ac , char **av , char **env)
     pipex(fd[2],av[2],av[3],env);
     return 0;
 }
+
+
+
+
 // int main (int ac , char ** av , char ** env)
 // {
 //     char ** split=parsing(env);
@@ -125,7 +129,4 @@ int main (int ac , char **av , char **env)
 
 
 
-
-
-
-/* only this left is to handle pipe and get things working and check accesibility nd last handling errors and norming*/
+/* only this left is to handle pipe and get things working + make use of dub a must check accesibility nd last handling errors and norming*/
