@@ -1,30 +1,36 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   pipex.c                                            :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2023/02/06 21:17:28 by ebennix           #+#    #+#             */
-// /*   Updated: 2023/02/10 01:17:16 by ebennix          ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
+/*   Updated: 2023/02/10 19:22:29 by ebennix          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
-char *parsing(char **env)
+char ** parsing(char **env)
 {
     int i = 0 ;
 
+    char ** splitz;
 	char * path = NULL;
-	while (env[i])
+	while (env[i] && path == NULL)
 	{
 		path = ft_strnstr(env[i],"PATH=",5);
 		i++;
-        if (path != NULL)
-            break;
 	}
-	return (ft_strdup(path)); // gotta free
+    splitz = ft_split(path + 5,':');
+    i = 0;
+    while (splitz[i])
+    {
+        splitz[i] = ft_strjoin(splitz[i],"/");
+        i++;
+    }
+    return (splitz);
 }
 
 int child_proc(int fd1 , char* cmd1 , char** path)
@@ -34,12 +40,10 @@ int child_proc(int fd1 , char* cmd1 , char** path)
     while(path[i])
     {
         //dup2(fd1,stdin);
-        char *fullpath = ft_strjoin(path[i],ft_strjoin("/",cmds[0]));
+        char *fullpath = ft_strjoin(path[i],cmds[0]);
         int err = execve(fullpath,cmds,NULL);
-        // if (err == -1)
-        // {
-        //     printf("cant find the command to execute");
-        // }
+        if (err == -1)
+            printf("cant find the command to execute");
         i++;
     }
 }
@@ -51,30 +55,30 @@ int parent_proc(int fd2 , char* cmd2 , char** path)
     while(path[i])
     {
         //dup2();
-        char *fullpath = ft_strjoin(path[i],ft_strjoin("/",cmds[0]));
+        char *fullpath = ft_strjoin(path[i],cmds[0]);
         int err = execve(fullpath,cmds,NULL);
-        // if (err == -1)
-        // {
-        //     printf("cant find the command to execute");
-        // }
+        if (err == -1)
+            printf("cant find the command to execute");
         i++;
     }
 }
 
-void    pipex(int fd1, char* cmd1, char* cmd2, int fd2 , char **env)
+void    pipex(int fd[2], char* cmd1, char* cmd2, char **env)
 {
-    // for process to child and parrent split the tasks so that the input for the child finishes as input for the parent to finish to simulate a pipe 
-    //note -- wait for child to finish the exec
     int err;
-    char * penv = parsing(env);
-    char ** path = ft_split(penv,':');
+    char ** path = parsing(env);
     pid_t pid = fork();
+
     if(pid < 0)
         return(perror("fork err"));
 
+    if (pipe(fd[2]) < 0);
+        return(perror("pipe failed"));
+
+    
     if (pid == 0)
     {
-        err = child_proc(fd1,cmd1,path);
+        err = child_proc(fd[0],cmd1,path);
         if (err < 0)
             return(perror("error in child"));
     }
@@ -82,7 +86,7 @@ void    pipex(int fd1, char* cmd1, char* cmd2, int fd2 , char **env)
     {
         wait(NULL); // pass var to check for errors
         // tqke a look at the acces function 
-        err = parent_proc(fd2,cmd2,path);
+        err = parent_proc(fd[1],cmd2,path);
         if (err < 0)
             return(perror("error in parent"));
     }
@@ -103,6 +107,24 @@ int main (int ac , char **av , char **env)
         perror("Error opening W/R files");
         return -2;
     }
-    pipex(fd[0],av[2],av[3],fd[1],env);
+    pipex(fd[2],av[2],av[3],env);
     return 0;
 }
+// int main (int ac , char ** av , char ** env)
+// {
+//     char ** split=parsing(env);
+//     int i = 0;
+//     while (split[i])
+//     {
+//         printf("%s\n",split[i]);
+//         i++;
+//     }
+//     printf("%s\n",split[i]);
+// }
+
+
+
+
+
+/* only this left is to handle pipe and get things working and add flags and
+ rights to files for fds and check accesibility last handling errors and norming*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bennix <bennix@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 20:52:56 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/09 21:23:03 by bennix           ###   ########.fr       */
+/*   Updated: 2023/02/10 19:19:25 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,6 @@ int	count_words(char *str, char c)
 	return (count);
 }
 
-char	**ft_free(char **str)
-{
-	char	*tab;
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		tab = str[i];
-		free(tab);
-		i++;
-	}
-	free(str);
-	str = NULL;
-	return (0);
-}
-
 char	*malloc_word(char *str, char c)
 {
 	char	*word;
@@ -67,6 +50,23 @@ char	*malloc_word(char *str, char c)
 	}
 	word[i] = '\0';
 	return (word);
+}
+
+char	**ft_free(char **str)
+{
+	char	*tab;
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		tab = str[i];
+		free(tab);
+		i++;
+	}
+	free(str);
+	str = NULL;
+	return (0);
 }
 
 char	**ft_split(char *s, char c)
@@ -97,19 +97,3 @@ char	**ft_split(char *s, char c)
 	tab[i] = NULL;
 	return (tab);
 } 
-/*
-int main(void)
-{
-	char **splitted;
-	char  *mamsplitich = "hello       world        hhhhh      bennix      zaml";
-	int i = 0;
-
-	splitted = ft_split(mamsplitich, ' ');
-	while(splitted[i])
-	{
-		printf("%s\n", splitted[i]);
-		i++;
-	}
-	printf("%s",splitted[i]);
-}
-*/
