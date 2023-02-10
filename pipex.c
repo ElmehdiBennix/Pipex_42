@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/10 21:40:38 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/10 21:55:05 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ char ** parsing(char **env)
     return (splitz);
 }
 
-int child_proc(int fd1 , char* cmd1 , char** path)
+int child_proc(int fd1 ,char* cmd1 , char** path)
 {
     int i = 0 ;
     char ** cmds = ft_split(cmd1,' ');
     while(path[i])
     {
-        //dup2(fd1,stdin);
+        dup2(fd1,STDIN_FILENO);
+        close(fd1);
         char *fullpath = ft_strjoin(path[i],cmds[0]);
         int err = execve(fullpath,cmds,NULL);
         if (err == -1)
@@ -54,7 +55,8 @@ int parent_proc(int fd2 , char* cmd2 , char** path)
     char ** cmds = ft_split(cmd2,' ');
     while(path[i])
     {
-        //dup2();
+        dup2(fd2,STDOUT_FILENO);
+        close(fd2);
         char *fullpath = ft_strjoin(path[i],cmds[0]);
         int err = execve(fullpath,cmds,NULL);
         if (err == -1)
