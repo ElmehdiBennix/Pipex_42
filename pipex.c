@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/10 19:22:29 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/10 19:52:57 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ int main (int ac , char **av , char **env)
         printf("error passing above 4 args");
         return -1;
     }
-    fd[0] = open(av[1],O_RDONLY);
-    fd[1] = open(av[4],O_WRONLY | O_TRUNC);
+    fd[0] = open(av[1],O_RDONLY | O_CREAT , 0777);
+    fd[1] = open(av[4],O_WRONLY | O_TRUNC | O_CREAT , 0777);
     if (fd[0] < 0 || fd[1] < 0)
     {
         perror("Error opening W/R files");
@@ -126,5 +126,4 @@ int main (int ac , char **av , char **env)
 
 
 
-/* only this left is to handle pipe and get things working and add flags and
- rights to files for fds and check accesibility last handling errors and norming*/
+/* only this left is to handle pipe and get things working and check accesibility nd last handling errors and norming*/
