@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/10 21:55:05 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/10 23:17:01 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@ char ** parsing(char **env)
     return (splitz);
 }
 
-int child_proc(int fd1 ,char* cmd1 , char** path)
+int child_proc(int *fd ,char* cmd1 , char** path)
 {
     int i = 0 ;
     char ** cmds = ft_split(cmd1,' ');
     while(path[i])
     {
-        dup2(fd1,STDIN_FILENO);
-        close(fd1);
+        dup2(fd[1],STDOUT_FILENO);
+        close(fd[0]);
+        close(fd[1]);
         char *fullpath = ft_strjoin(path[i],cmds[0]);
         int err = execve(fullpath,cmds,NULL);
         if (err == -1)
@@ -49,14 +50,15 @@ int child_proc(int fd1 ,char* cmd1 , char** path)
     }
 }
 
-int parent_proc(int fd2 , char* cmd2 , char** path)
+int parent_proc(int *fd , char* cmd2 , char** path)
 {
     int i = 0;
     char ** cmds = ft_split(cmd2,' ');
     while(path[i])
     {
-        dup2(fd2,STDOUT_FILENO);
-        close(fd2);
+        dup2(fd[0],STDIN_FILENO);
+        close(fd[0]); 
+        close(fd[1]);
         char *fullpath = ft_strjoin(path[i],cmds[0]);
         int err = execve(fullpath,cmds,NULL);
         if (err == -1)
@@ -65,7 +67,7 @@ int parent_proc(int fd2 , char* cmd2 , char** path)
     }
 }
 
-void    pipex(int fd[2], char* cmd1, char* cmd2, char **env)
+void    pipex(int *fd, char* cmd1, char* cmd2, char **env)
 {
     int err;
     char ** path = parsing(env);
@@ -74,13 +76,13 @@ void    pipex(int fd[2], char* cmd1, char* cmd2, char **env)
     if(pid < 0)
         return(perror("fork err"));
 
-    if (pipe(fd[2]) < 0);
+    if (pipe(fd) < 0)
         return(perror("pipe failed"));
 
     
     if (pid == 0)
     {
-        err = child_proc(fd[0],cmd1,path);
+        err = child_proc(fd,cmd1,path);
         if (err < 0)
             return(perror("error in child"));
     }
@@ -88,7 +90,7 @@ void    pipex(int fd[2], char* cmd1, char* cmd2, char **env)
     {
         wait(NULL); // pass var to check for errors
         // tqke a look at the acces function 
-        err = parent_proc(fd[1],cmd2,path);
+        err = parent_proc(fd,cmd2,path);
         if (err < 0)
             return(perror("error in parent"));
     }
@@ -109,7 +111,7 @@ int main (int ac , char **av , char **env)
         perror("Error opening W/R files");
         return -2;
     }
-    pipex(fd[2],av[2],av[3],env);
+    pipex(fd,av[2],av[3],env);
     return 0;
 }
 
