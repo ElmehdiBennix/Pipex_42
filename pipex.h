@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 19:05:38 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/12 00:31:48 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/12 21:21:53 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ char    **parsing(char **env);
 void child_one(int fd ,char* cmd1 , char** path , int *pip);
 void child_two(int fd , char* cmd2 , char** path , int *pip);
 void    pipex(int *fd, char* cmd1, char* cmd2, char **env);
+
+char	**ft_free(char **str);
 
 #endif
