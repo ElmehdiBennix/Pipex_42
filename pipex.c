@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bennix <bennix@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/11 15:21:27 by bennix           ###   ########.fr       */
+/*   Updated: 2023/02/12 00:48:21 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,71 +33,65 @@ char ** parsing(char **env)
     return (splitz);
 }
 
-int child_proc(int fd ,char* cmd1 , char** path , int *pip)
+void child_one(int fd ,char* cmd1 , char** path , int *pip)
 {
     int i = 0 ;
     int err;
+    char *fullpath;
     char ** cmds = ft_split(cmd1,' ');
+    dup2(fd, STDIN_FILENO);
+	dup2(pip[1], STDOUT_FILENO);
+	close(pip[0]);
+    close(fd);
     while(path[i])
     {
-        dup2(fd, STDIN_FILENO);
-	    dup2(pip[1], STDOUT_FILENO);
-	    close(pip[0]);
-        char *fullpath = ft_strjoin(path[i],cmds[0]);
+        fullpath = ft_strjoin(path[i],cmds[0]);
         err = execve(fullpath,cmds,NULL);
         i++;
     }
     if (err == -1)
-        perror("cant find the command to execute");
+        perror("cant find the first command to execute");
+    
 }
 
-int parent_proc(int fd , char* cmd2 , char** path , int *pip)
+void child_two(int fd , char* cmd2 , char** path , int *pip)
 {
     int i = 0;
     int err ;
+    char *fullpath;
     char ** cmds = ft_split(cmd2,' ');
 	dup2(fd, STDOUT_FILENO);
     dup2(pip[0], STDIN_FILENO);
 	close(pip[1]);
-    close(fd);
+	close(fd);
     while(path[i])
     {
-        char *fullpath = ft_strjoin(path[i],cmds[0]);
+        fullpath = ft_strjoin(path[i],cmds[0]);
         err = execve(fullpath,cmds,NULL);
         i++;
     }
     if (err == -1)
-        perror("cant find the command to execute");
+        perror("cant find the second command to execute");
 }
 
 void    pipex(int *fd, char* cmd1, char* cmd2, char **env)
 {
-    int err;
     char ** path = parsing(env);
+
     int pip[2];
-    pid_t pid = fork();
+    pipe(pip);
 
-    if(pid < 0)
-        return(perror("fork err"));
-
-    if (pipe(pip) < 0)
-        return(perror("pipe failed"));
-
-    
-    if (pid == 0)
+    int pid1 = fork();
+    if (pid1 == 0)
     {
-        err = child_proc(fd[0],cmd1,path,pip);
-        if (err < 0)
-            return(perror("error in child"));
+        child_one(fd[0], cmd1, path, pip);
     }
-    else
+    if(pid1 != 0)
     {
-		wait(NULL);
-        // tqke a look at the acces function 
-        err = parent_proc(fd[1],cmd2,path,pip);
-        if (err < 0)
-            return(perror("error in parent"));
+        waitpid(pid1,NULL,0);
+        child_two(fd[1], cmd2, path, pip);
     }
+    wait(NULL);
 }
 
 int main (int ac , char **av , char **env) 
@@ -118,22 +112,4 @@ int main (int ac , char **av , char **env)
     return 0;
 }
 
-
-
-
-// int main (int ac , char ** av , char ** env)
-// {
-//     char ** split=parsing(env);
-//     int i = 0;
-//     while (split[i])
-//     {
-//         printf("%s\n",split[i]);
-//         i++;
-//     }
-//     printf("%s\n",split[i]);
-// }
-
-
-
-
-/* only this left is to handle pipe and get things working + make use of dub a must check accesibility nd last handling errors and norming*/
+// /* only this left is to handle pipe and get things working + make use of dub a must check accesibility nd last handling errors and norming*/

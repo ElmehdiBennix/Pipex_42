@@ -1,1 +1,15 @@
-      0       0       0
+total 104
+drwxr-xr-x  14 ebennix  candidate    476 Feb 12 00:48 .
+drwxr-xr-x   5 ebennix  candidate    170 Feb  9 22:10 ..
+drwxr-xr-x  15 ebennix  candidate    510 Feb 11 20:28 .git
+-rw-r--r--   1 ebennix  candidate   2368 Feb  9 22:02 .gitignore
+-rw-r--r--   1 ebennix  candidate   1350 Feb 11 20:28 Makefile
+-rwxr-xr-x   1 ebennix  candidate  13676 Feb 12 00:48 a.out
+-rw-r--r--   1 ebennix  candidate   3167 Feb  9 22:02 ft_libsplit.c
+-rw-r--r--   1 ebennix  candidate   2010 Feb 10 19:19 ft_split.c
+-rw-r--r--   1 ebennix  candidate     19 Feb 10 22:20 intest
+-rw-r--r--   1 ebennix  candidate      0 Feb 12 00:49 outest
+-rw-r--r--   1 ebennix  candidate   3049 Feb 12 00:48 pipex.c
+-rw-r--r--   1 ebennix  candidate   1502 Feb 12 00:31 pipex.h
+-rw-r--r--   1 ebennix  candidate   2227 Feb 12 00:32 pipex_utils.c
+-rw-r--r--   1 ebennix  candidate    173 Feb 11 20:54 test.c
