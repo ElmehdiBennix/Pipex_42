@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/13 02:55:41 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/13 03:35:06 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,84 +35,109 @@ char	**parsing(char **env)
 	return (splitz);
 }
 
-void	child_proc(int fd ,char* cmd1 , char** path , int *pip)
+int	child_proc(int fd ,char* cmd1 , char** path , int *pip)
 {
 	int i  ;
 	int err;
 	char *fullpath;
 	char ** cmds = ft_split(cmd1,' ');
+	
 	i = 0 ;
 	dup2(fd, STDIN_FILENO);
 	dup2(pip[1], STDOUT_FILENO);
 	close(pip[0]);
 	close(fd);
-	while (path[i])
+	while (path[i] && err == 0)
 	{
 		fullpath = ft_strjoin(path[i],cmds[0]);
-		err = execve(fullpath,cmds,NULL);
+		err = access(fullpath,X_OK);
 		i++;
 	}
 	if (err == -1)
+	{
 		perror("cant find the first command to execute");
+		return (err);
+	}
+	execve(fullpath,cmds,NULL);
 }
 
-void	parent_proc(int fd , char* cmd2 , char** path , int *pip)
+int	parent_proc(int fd , char* cmd2 , char** path , int *pip)
 {
 	int i ;
 	int err ;
 	char *fullpath;
 	char ** cmds = ft_split(cmd2,' ');
+	
 	i = 0;
 	dup2(fd, STDOUT_FILENO);
 	dup2(pip[0], STDIN_FILENO);
 	close(pip[1]);
 	close(fd);
-	while (path[i])
+	while (path[i] && err == 0)
 	{
 		fullpath = ft_strjoin(path[i],cmds[0]);
-		err = execve(fullpath,cmds,NULL);
+		err = access(fullpath,X_OK);
 		i++;
 	}
 	if (err == -1)
+	{
 		perror("cant find the second command to execute");
+		return (err);
+	}
+	execve(fullpath,cmds,NULL);
 }
 
 void	pipex(int *fd, char* cmd1, char* cmd2, char **env)
 {
 	char **path = parsing(env);
+	int err;
 
 	int pip[2];
-	pipe(pip);
-	int pid1 = fork();
-	if (pid1 == 0)
+	if (pipe(pip) == -1 )
 	{
-		child_proc(fd[0], cmd1, path, pip);
-	}
-	if (pid1 != 0)
+		perror("pipe failed");
+        exit(EXIT_FAILURE);
+    }
+	int pid = fork();
+	if(pid == -1)
 	{
-		waitpid(pid1,NULL,0);
-		parent_proc(fd[1], cmd2, path, pip);
+        perror("fork failed");
+        exit(EXIT_FAILURE);
+    }
+	if (pid == 0)
+	{
+		err = child_proc(fd[0], cmd1, path, pip);
+		if (err == -1)
+			exit(EXIT_FAILURE);
+		
 	}
-	wait(NULL);
+	if (pid != 0)
+	{
+		waitpid(pid,NULL,0); ///CHECKKSSS
+		err = parent_proc(fd[1], cmd2, path, pip);
+		if (err == -1)
+			exit(EXIT_FAILURE);
+	}
+	wait(NULL);   //CHECKKKSSS
 }
 
-// int main (int ac , char **av , char **env) 
-// {
-//     int fd[2];
-//     if (ac != 5) {
-//         printf("error passing above 4 args");
-//         return -1;
-//     }
-//     fd[0] = open(av[1],O_RDONLY);
-//     fd[1] = open(av[4],O_WRONLY | O_TRUNC | O_CREAT , 0644);
-//     if (fd[0] < 0 || fd[1] < 0)
-//     {
-//         perror("Error opening W/R files");
-//         return -2;
-//     }
-//     pipex(fd,av[2],av[3],env);
-//     return 0;
-// }
+int main (int ac , char **av , char **env) 
+{
+	int err;
+    int fd[2];
+    if (ac != 5)
+        return (printf("error passing above 4 args"));
+	err = access(av[1],R_OK);
+	err = access(av[4],W_OK | R_OK );
+	if (err = -1)
+		return (printf("file permission W/R denied"));
+    fd[0] = open(av[1],O_RDONLY);
+    fd[1] = open(av[4],O_WRONLY | O_TRUNC | O_CREAT , 0644);
+    if (fd[0] < 0 || fd[1] < 0)
+        return (printf("Error opening W/R files"));
+    pipex(fd,av[2],av[3],env);
+    return (EXIT_SUCCESS);
+}
 
 // int main (int ac ,char**av, char ** env)
 // {
@@ -121,4 +146,14 @@ void	pipex(int *fd, char* cmd1, char* cmd2, char **env)
 // 	//     sleep(1);
 // }
 
-// /* only this left is to handle pipe and get things working + make use of dub a must check accesibility nd last handling errors and norming*/
+/*
+
+	****left to do :
+
+	norminette
+	checksssss comment correction
+	make sure all tests pass
+	makefile works properly
+	leaks
+
+*/

@@ -1,5 +1,8 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+
 int main()
 {
 char *str;
@@ -9,4 +12,3 @@ read(0,str,1000);
 write(1,str,1000);
 free(str);
 }
-
