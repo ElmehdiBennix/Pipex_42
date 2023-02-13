@@ -6,36 +6,34 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/09 22:08:57 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/13 02:51:26 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := pipex
+NAME = pipex
 
-CC := gcc
+CC = cc
 
-CFLAGS := -g -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
-HEADER := pipex.h
+HEADER = pipex.h
 
-FILES := pipex /
+FILES = pipex /
 		pipex_utils /
 		ft_split /
 
 
-SRC := $(FILES:=.c)
-OBJ:= $(SRC:.c=.o)
+SRC = $(FILES:=.c)
+OBJ = $(SRC:.c=.o)
 
-RM := rm -rf
+RM = rm -rf
 
-all :$(NAME)
+all : $(NAME)
 
-$(NAME):$(OBJ)
+$(NAME) : $(OBJ)
 	$(cc) $(OBJ) -o $(NAME)
-	
-#main:
 
-%.o : $(SRC) $(HEADER)
+%.o : %.c $(SRC) $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
@@ -46,9 +44,9 @@ fclean :
 
 re : fclean all
 
-#git : 
-#	git add .
-#	git commit -m "MakefileAutoPush"
-#	git push
-	
+git :
+	git add .
+	git commit -m "MakefileAutoPush"
+	git push
+
 .PHONY : clean fclean re

@@ -6,40 +6,45 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/12 00:32:00 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/13 02:13:02 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-    size_t i = 0;
-    
-    if(str == NULL || str[i] == '\0') {
-        return 0 ;
-    }else{
-        while (str[i] != '\0')
-            i++;
-        return i ;
-    }
+	size_t	i;
+
+	i = 0;
+	if (str == NULL || str[i] == '\0')
+	{
+		return (0);
+	}
+	else
+	{
+		while (str[i] != '\0')
+			i++;
+		return (i);
+	}
 }
 
-char *ft_strdup(const char *s)
+char	*ft_strdup(const char *s)
 {
-    size_t i = 0;
-    char *str;
-    
-    str=(char *)malloc((ft_strlen(s)+1)*sizeof(char));
-    if (!str)
-        return NULL;
-    while (s[i])
-    {
-        str[i]=s[i];
-        i++;
-    }
-    str[i]='\0';
-    return str;
+	size_t	i;
+	char	*str;
+
+	i = 0;
+	str = (char *)malloc((ft_strlen(s)+ 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	while (s[i])
+	{
+		str[i] = s[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -91,4 +96,3 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	}
 	return (NULL);
 }
-

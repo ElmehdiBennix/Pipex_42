@@ -6,44 +6,44 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 20:52:56 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/10 19:19:25 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/13 02:47:09 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	count_words(char *str, char c)
+static	int	word_counter(char *str, char delim)
 {
-	int		count;
+	int	word;
 
-	count = 0;
+	word = 0;
 	while (*str)
 	{
-		while (*str && *str == c)
+		while (*str != '\0' && *str == delim)
 			str++;
-		if (*str && *str != c)
+		if (*str != '\0' && *str != delim)
 		{
-			count++;
-			while (*str && *str != c)
+			word++;
+			while (*str != '\0' && *str != delim)
 				str++;
 		}
 	}
-	return (count);
+	return (word);
 }
 
-char	*malloc_word(char *str, char c)
+static	char	*word_malloc(char *str, char delim)
 {
 	char	*word;
 	int		i;
 
 	i = 0;
-	while (str[i] && str[i] != c)
+	while (str[i] != '\0' && str[i] != delim)
 		i++;
 	word = (char *)malloc(sizeof(char) * (i + 1));
 	if (!word)
 		return (NULL);
 	i = 0;
-	while (str[i] && str[i] != c)
+	while (str[i] != '\0' && str[i] != delim)
 	{
 		word[i] = str[i];
 		i++;
@@ -52,13 +52,13 @@ char	*malloc_word(char *str, char c)
 	return (word);
 }
 
-char	**ft_free(char **str)
+char	**free_2d(char **str)
 {
 	char	*tab;
 	int		i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] != '\0')
 	{
 		tab = str[i];
 		free(tab);
@@ -66,34 +66,34 @@ char	**ft_free(char **str)
 	}
 	free(str);
 	str = NULL;
-	return (0);
+	return (NULL);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(char *str, char delim)
 {
 	char	**tab;
 	int		i;
 
-	if (!s)
+	i = 0;
+	if (!str)
 		return (NULL);
-	tab = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
+	tab = (char **)malloc((word_counter(str, delim) + 1) * sizeof(char *));
 	if (!tab)
 		return (NULL);
-	i = 0;
-	while (*s)
+	while (*str)
 	{
-		while (*s && *s == c)
-			s++;
-		if (*s && *s != c)
+		while (*str != '\0' && *str == delim)
+			str++;
+		if (*str != '\0' && *str != delim)
 		{
-			tab[i] = malloc_word(s, c);
+			tab[i] = word_malloc(str, delim);
 			if (tab[i] == NULL)
-				return (ft_free(tab));
+				return (free_2d(tab));
 			i++;
-			while (*s && *s != c)
-				s++;
+			while (*str != '\0' && *str != delim)
+				str++;
 		}
 	}
 	tab[i] = NULL;
 	return (tab);
-} 
+}
