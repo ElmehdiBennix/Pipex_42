@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/13 03:35:06 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/13 04:08:50 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int main (int ac , char **av , char **env)
 	int err;
     int fd[2];
     if (ac != 5)
-        return (printf("error passing above 4 args"));
+        return (printf("error 4 arguments are required"));
 	err = access(av[1],R_OK);
 	err = access(av[4],W_OK | R_OK );
 	if (err = -1)
@@ -145,6 +145,11 @@ int main (int ac , char **av , char **env)
 // 	// while (1)
 // 	//     sleep(1);
 // }
+
+
+
+
+
 
 /*
 
