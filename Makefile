@@ -6,7 +6,7 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/14 18:20:04 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/14 18:20:47 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,9 @@ re : fclean all
 
 git :
 	git add .
+	git status
 	git commit -m $(m)
+	git status
 	git push
 
 .PHONY : clean fclean re
