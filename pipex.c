@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 20:02:19 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 20:24:07 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,16 +112,13 @@ void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-	{
 		child_proc(fd[0], cmd1, path, pip);
-	}
-	else
+	if (pid != 0)
 	{
-		waitpid(pid, NULL, 0);
+		wait(NULL);
 		parent_proc(fd[1], cmd2, path, pip);
 	}
-	wait(NULL);
-
+	free_2d(path);
 }
 
 int	main(int ac, char **av, char **env)
@@ -143,18 +140,5 @@ int	main(int ac, char **av, char **env)
 
 	path = parsing(env);
 	pipex(fd, av[2], av[3], path);
-	free_2d(path);
-	// fprintf(stderr, "%s", "opsi leaks!   frrrr\n");
-	// while(1)
-	// 	sleep(1);
 	return (EXIT_SUCCESS);
 }
-
-/*
-
-	****left to do :
-	
-	norminette
-	2 leaks left
-
-*/
