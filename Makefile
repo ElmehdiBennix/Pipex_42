@@ -6,7 +6,7 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/14 20:43:20 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/14 20:54:53 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ FILES := pipex \
 		utils/ft_split \
 		ft_printf/utils/ft_printf_hex \
 		ft_printf/utils/ft_printf_put \
-		ft_printf/ft_printf
+		ft_printf/ft_printf \
 
 SRC := $(FILES:=.c)
 OBJ := $(SRC:.c=.o)
