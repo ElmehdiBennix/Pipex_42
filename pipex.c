@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 20:27:34 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 20:29:43 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,14 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 5)
 		return (ft_printf("error 4 arguments are required"));
-	err[0] = access(av[1], R_OK | W_OK);
-	err[1] = access(av[4], W_OK | R_OK);
-	if (err[0] == -1 || err[1] == -1)
-		return (ft_printf("file permission W/R denied"));
-	fd[0] = open(av[1], O_RDONLY | O_CREAT);
+	fd[0] = open(av[1], O_RDONLY | O_CREAT, 0644);
 	fd[1] = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_printf("Error opening W/R files"));
+	err[0] = access(av[1], R_OK);
+	err[1] = access(av[4], W_OK | R_OK);
+	if (err[0] == -1 || err[1] == -1)
+		return (ft_printf("file permission W/R denied"));
 	path = parsing(env);
 	pipex(fd, av[2], av[3], path);
 	return (EXIT_SUCCESS);
