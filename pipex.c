@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/13 04:08:50 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 16:48:23 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 
 char	**parsing(char **env)
 {
-	int i = 0 ;
-	char ** splitz;
-	char *tmp;
-	char * path = NULL;
+	int		i;
+	char	*tmp;
+	char	**splitz;
+	char	*path;
+
+	i = 0;
+	path = NULL;
 	while (env[i] && path == NULL)
 	{
-		path = ft_strnstr(env[i],"PATH=",5);
+		path = ft_strnstr(env[i], "PATH=", 5);
 		i++;
 	}
-	splitz = ft_split(path + 5,':');
+	splitz = ft_split(path + 5, ':');
 	i = 0;
 	while (splitz[i])
 	{
-		tmp = ft_strjoin(splitz[i],"/");
+		tmp = ft_strjoin(splitz[i], "/");
 		free(splitz[i]);
 		splitz[i] = tmp;
 		i++;
@@ -35,108 +38,102 @@ char	**parsing(char **env)
 	return (splitz);
 }
 
-int	child_proc(int fd ,char* cmd1 , char** path , int *pip)
+void	child_proc(int fd, char *cmd1, char **path, int *pip)
 {
-	int i  ;
-	int err;
-	char *fullpath;
-	char ** cmds = ft_split(cmd1,' ');
-	
+	int		i;
+	int		err;
+	char	*fullpath;
+	char	**cmds;
+
 	i = 0 ;
+	cmds = ft_split(cmd1, ' ');
 	dup2(fd, STDIN_FILENO);
 	dup2(pip[1], STDOUT_FILENO);
 	close(pip[0]);
 	close(fd);
-	while (path[i] && err == 0)
+	while (path[i])
 	{
-		fullpath = ft_strjoin(path[i],cmds[0]);
-		err = access(fullpath,X_OK);
+		fullpath = ft_strjoin(path[i], cmds[0]);
+		err = execve(fullpath, cmds, NULL);
 		i++;
 	}
 	if (err == -1)
 	{
-		perror("cant find the first command to execute");
-		return (err);
+		perror("first command not found");
+		exit(EXIT_FAILURE);
 	}
-	execve(fullpath,cmds,NULL);
 }
 
-int	parent_proc(int fd , char* cmd2 , char** path , int *pip)
+void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 {
-	int i ;
-	int err ;
-	char *fullpath;
-	char ** cmds = ft_split(cmd2,' ');
-	
+	int		i;
+	int		err;
+	char	*fullpath;
+	char	**cmds;
+
 	i = 0;
+	cmds = ft_split(cmd2, ' ');
 	dup2(fd, STDOUT_FILENO);
 	dup2(pip[0], STDIN_FILENO);
 	close(pip[1]);
 	close(fd);
-	while (path[i] && err == 0)
+	while (path[i])
 	{
-		fullpath = ft_strjoin(path[i],cmds[0]);
-		err = access(fullpath,X_OK);
+		fullpath = ft_strjoin(path[i], cmds[0]);
+		err = execve(fullpath, cmds, NULL);
 		i++;
 	}
 	if (err == -1)
 	{
-		perror("cant find the second command to execute");
-		return (err);
+		perror("second command not found");
+		exit(EXIT_FAILURE);
 	}
-	execve(fullpath,cmds,NULL);
 }
 
-void	pipex(int *fd, char* cmd1, char* cmd2, char **env)
+void	pipex(int *fd, char *cmd1, char *cmd2, char **env)
 {
-	char **path = parsing(env);
-	int err;
+	pid_t	pid;
+	int		pip[2];
+	char	**path;
 
-	int pip[2];
-	if (pipe(pip) == -1 )
+	path = parsing(env);
+	if (pipe(pip) == -1)
 	{
 		perror("pipe failed");
-        exit(EXIT_FAILURE);
-    }
-	int pid = fork();
-	if(pid == -1)
-	{
-        perror("fork failed");
-        exit(EXIT_FAILURE);
-    }
-	if (pid == 0)
-	{
-		err = child_proc(fd[0], cmd1, path, pip);
-		if (err == -1)
-			exit(EXIT_FAILURE);
-		
+		exit(EXIT_FAILURE);
 	}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork failed");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+		child_proc(fd[0], cmd1, path, pip);
 	if (pid != 0)
 	{
-		waitpid(pid,NULL,0); ///CHECKKSSS
-		err = parent_proc(fd[1], cmd2, path, pip);
-		if (err == -1)
-			exit(EXIT_FAILURE);
+		waitpid(pid, NULL, 0);
+		parent_proc(fd[1], cmd2, path, pip);
 	}
-	wait(NULL);   //CHECKKKSSS
 }
 
-int main (int ac , char **av , char **env) 
+int	main(int ac, char **av, char **env)
 {
-	int err;
-    int fd[2];
-    if (ac != 5)
-        return (printf("error 4 arguments are required"));
-	err = access(av[1],R_OK);
-	err = access(av[4],W_OK | R_OK );
-	if (err = -1)
-		return (printf("file permission W/R denied"));
-    fd[0] = open(av[1],O_RDONLY);
-    fd[1] = open(av[4],O_WRONLY | O_TRUNC | O_CREAT , 0644);
-    if (fd[0] < 0 || fd[1] < 0)
-        return (printf("Error opening W/R files"));
-    pipex(fd,av[2],av[3],env);
-    return (EXIT_SUCCESS);
+	int	err[2];
+	int	fd[2];
+
+	if (ac != 5)
+		return (ft_printf("error 4 arguments are required"));
+	err[0] = access(av[1], R_OK | W_OK);
+	err[1] = access(av[4], W_OK | R_OK);
+	if (err[0] == -1 || err[1] == -1)
+		return (ft_printf("file permission W/R denied"));
+	fd[0] = open(av[1], O_RDONLY | O_CREAT);
+	fd[1] = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (fd[0] < 0 || fd[1] < 0)
+		return (ft_printf("Error opening W/R files"));
+	pipex(fd, av[2], av[3], env);
+	return (EXIT_SUCCESS);
 }
 
 // int main (int ac ,char**av, char ** env)
@@ -146,18 +143,11 @@ int main (int ac , char **av , char **env)
 // 	//     sleep(1);
 // }
 
-
-
-
-
-
 /*
 
 	****left to do :
-
+	
 	norminette
-	checksssss comment correction
-	make sure all tests pass
 	makefile works properly
 	leaks
 

@@ -6,41 +6,46 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/13 02:51:26 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/14 17:48:21 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+EXE := pipex
 
-CC = cc
+NAME := printf.a
 
-CFLAGS = -g -Wall -Wextra -Werror
+CC := cc
 
-HEADER = pipex.h
+CFLAGS := -g -Wall -Wextra -Werror
 
-FILES = pipex /
-		pipex_utils /
-		ft_split /
+HEADER := pipex.h
 
+FILES := pipex \
+		utils/pipex_utils \
+		utils/ft_split \
+		ft_printf/utils/ft_printf_hex \
+		ft_printf/utils/ft_printf_ptr \
+		ft_printf/utils/ft_printf_put \
+		ft_printf/ft_printf
 
-SRC = $(FILES:=.c)
-OBJ = $(SRC:.c=.o)
+SRC := $(FILES:=.c)
+OBJ := $(SRC:.c=.o)
 
-RM = rm -rf
+RM := rm -rf
 
-all : $(NAME)
+all : $(EXE)
 
-$(NAME) : $(OBJ)
-	$(cc) $(OBJ) -o $(NAME)
+$(EXE) : $(OBJ)
+	$(CC) $(OBJ) -o $(EXE)
 
-%.o : %.c $(SRC) $(HEADER)
+%.o : %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
 	$(RM) $(OBJ)
 
-fclean :
-	$(RM) $(NAME)
+fclean : clean
+	$(RM) $(EXE)
 
 re : fclean all
 

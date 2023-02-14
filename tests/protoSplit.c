@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_libsplit.c                                      :+:      :+:    :+:   */
+/*   protoSplit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 01:02:26 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/13 02:46:14 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 16:15:12 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ static	char	*ft_strdup(const char *s)
 
 char	**ft_split(const char *str, char c)
 {
+	int		i;
 	char	**res;
 	char	*tmp = ft_strdup(str);
 	char	*p = tmp;
-	int	i;
-	int	word = 0;
+	int		word = 0;
 
 	while (*p)
 	{
