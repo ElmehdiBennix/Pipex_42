@@ -6,13 +6,13 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 18:45:39 by ebennix           #+#    #+#             */
-/*   Updated: 2022/11/19 16:34:38 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 20:48:02 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	check(const char str, va_list arg)
+static	int	check(const char str, va_list arg)
 {
 	if (str == 'c')
 		return (ft_printchar(va_arg(arg, int)));
@@ -21,16 +21,14 @@ int	check(const char str, va_list arg)
 	else if (str == 'p')
 	{
 		write(1, "0x", 2);
-		return (ft_printptr(va_arg(arg, unsigned long)) + 2);
+		return (ft_hex(va_arg(arg, unsigned long), 'x') + 2);
 	}
 	else if (str == 'i' || str == 'd')
 		return (ft_printnbr(va_arg(arg, int)));
 	else if (str == 'u')
 		return (ft_printunsigned(va_arg(arg, unsigned int)));
-	else if (str == 'x')
-		return (ft_lowhex(va_arg(arg, unsigned int)));
-	else if (str == 'X')
-		return (ft_caphex(va_arg(arg, unsigned int)));
+	else if (str == 'x' || str == 'X')
+		return (ft_hex(va_arg(arg, unsigned int), str));
 	else if (str == '%')
 		return (ft_printchar('%'));
 	else

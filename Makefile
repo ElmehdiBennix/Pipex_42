@@ -6,7 +6,7 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/14 18:22:38 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/14 20:43:20 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ FILES := pipex \
 		utils/pipex_utils \
 		utils/ft_split \
 		ft_printf/utils/ft_printf_hex \
-		ft_printf/utils/ft_printf_ptr \
 		ft_printf/utils/ft_printf_put \
 		ft_printf/ft_printf
 
