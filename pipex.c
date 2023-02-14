@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 20:24:07 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 20:27:34 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 		exit(EXIT_FAILURE);
 	}
 	free_2d(cmds);
-
 }
 
 void	parent_proc(int fd, char *cmd2, char **path, int *pip)
@@ -137,7 +136,6 @@ int	main(int ac, char **av, char **env)
 	fd[1] = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_printf("Error opening W/R files"));
-
 	path = parsing(env);
 	pipex(fd, av[2], av[3], path);
 	return (EXIT_SUCCESS);
