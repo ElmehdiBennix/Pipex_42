@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 16:48:23 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/14 20:02:19 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 	{
 		fullpath = ft_strjoin(path[i], cmds[0]);
 		err = execve(fullpath, cmds, NULL);
+		free(fullpath);
 		i++;
 	}
 	if (err == -1)
@@ -62,6 +63,8 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 		perror("first command not found");
 		exit(EXIT_FAILURE);
 	}
+	free_2d(cmds);
+
 }
 
 void	parent_proc(int fd, char *cmd2, char **path, int *pip)
@@ -81,6 +84,7 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 	{
 		fullpath = ft_strjoin(path[i], cmds[0]);
 		err = execve(fullpath, cmds, NULL);
+		free(fullpath);
 		i++;
 	}
 	if (err == -1)
@@ -88,15 +92,14 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 		perror("second command not found");
 		exit(EXIT_FAILURE);
 	}
+	free_2d(cmds);
 }
 
-void	pipex(int *fd, char *cmd1, char *cmd2, char **env)
+void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
 {
 	pid_t	pid;
 	int		pip[2];
-	char	**path;
 
-	path = parsing(env);
 	if (pipe(pip) == -1)
 	{
 		perror("pipe failed");
@@ -109,18 +112,23 @@ void	pipex(int *fd, char *cmd1, char *cmd2, char **env)
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
+	{
 		child_proc(fd[0], cmd1, path, pip);
-	if (pid != 0)
+	}
+	else
 	{
 		waitpid(pid, NULL, 0);
 		parent_proc(fd[1], cmd2, path, pip);
 	}
+	wait(NULL);
+
 }
 
 int	main(int ac, char **av, char **env)
 {
-	int	err[2];
-	int	fd[2];
+	int		err[2];
+	int		fd[2];
+	char	**path;
 
 	if (ac != 5)
 		return (ft_printf("error 4 arguments are required"));
@@ -132,23 +140,21 @@ int	main(int ac, char **av, char **env)
 	fd[1] = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_printf("Error opening W/R files"));
-	pipex(fd, av[2], av[3], env);
+
+	path = parsing(env);
+	pipex(fd, av[2], av[3], path);
+	free_2d(path);
+	// fprintf(stderr, "%s", "opsi leaks!   frrrr\n");
+	// while(1)
+	// 	sleep(1);
 	return (EXIT_SUCCESS);
 }
-
-// int main (int ac ,char**av, char ** env)
-// {
-// 	char ** pars = parsing(env);   
-// 	// while (1)
-// 	//     sleep(1);
-// }
 
 /*
 
 	****left to do :
 	
 	norminette
-	makefile works properly
-	leaks
+	2 leaks left
 
 */
