@@ -6,7 +6,7 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/14 18:19:48 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/14 18:20:04 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ OBJ := $(SRC:.c=.o)
 
 RM := rm -rf
 
-M := "MakefileAutoPush"
+m := "MakefileAutoPush"
 
 all : $(EXE)
 
@@ -53,7 +53,7 @@ re : fclean all
 
 git :
 	git add .
-	git commit -m $(M)
+	git commit -m $(m)
 	git push
 
 .PHONY : clean fclean re
