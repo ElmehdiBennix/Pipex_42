@@ -6,7 +6,7 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/14 18:21:26 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/14 18:21:38 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,6 @@ fclean : clean
 
 re : fclean all
 
-#
 git :
 	git add .
 	git status
