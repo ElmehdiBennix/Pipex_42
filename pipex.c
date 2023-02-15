@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/15 15:43:28 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/15 18:37:14 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 	char	*fullpath;
 	char	**cmds;
 
-	i = 0 ;
+	i = -1 ;
 	cmds = ft_split(cmd1, ' ');
 	dup2(fd, STDIN_FILENO);
 	dup2(pip[1], STDOUT_FILENO);
 	close(pip[0]);
 	close(fd);
-	while (path[i])
+	while (path[++i])
 	{
 		if (access(cmd1, X_OK) == 0)
 			execve(cmd1, cmds, NULL);
@@ -60,7 +60,6 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 			fullpath = ft_strjoin(path[i], cmds[0]);
 			err = execve(fullpath, cmds, NULL);
 			free(fullpath);
-			i++;
 		}
 	}
 	if (err == -1)
@@ -78,13 +77,13 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 	char	*fullpath;
 	char	**cmds;
 
-	i = 0;
+	i = -1;
 	cmds = ft_split(cmd2, ' ');
 	dup2(fd, STDOUT_FILENO);
 	dup2(pip[0], STDIN_FILENO);
 	close(pip[1]);
 	close(fd);
-	while (path[i])
+	while (path[++i])
 	{
 		if (access(cmd2, X_OK) == 0)
 			execve(cmd2, cmds, NULL);
@@ -93,7 +92,6 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 			fullpath = ft_strjoin(path[i], cmds[0]);
 			err = execve(fullpath, cmds, NULL);
 			free(fullpath);
-			i++;
 		}
 	}
 	if (err == -1)
