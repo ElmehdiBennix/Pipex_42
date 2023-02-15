@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 20:55:45 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/15 15:43:28 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,15 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 	close(fd);
 	while (path[i])
 	{
-		fullpath = ft_strjoin(path[i], cmds[0]);
-		err = execve(fullpath, cmds, NULL);
-		free(fullpath);
-		i++;
+		if (access(cmd1, X_OK) == 0)
+			execve(cmd1, cmds, NULL);
+		else
+		{
+			fullpath = ft_strjoin(path[i], cmds[0]);
+			err = execve(fullpath, cmds, NULL);
+			free(fullpath);
+			i++;
+		}
 	}
 	if (err == -1)
 	{
@@ -81,10 +86,15 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 	close(fd);
 	while (path[i])
 	{
-		fullpath = ft_strjoin(path[i], cmds[0]);
-		err = execve(fullpath, cmds, NULL);
-		free(fullpath);
-		i++;
+		if (access(cmd2, X_OK) == 0)
+			execve(cmd2, cmds, NULL);
+		else
+		{
+			fullpath = ft_strjoin(path[i], cmds[0]);
+			err = execve(fullpath, cmds, NULL);
+			free(fullpath);
+			i++;
+		}
 	}
 	if (err == -1)
 	{

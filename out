@@ -1,0 +1,10 @@
+Makefile
+ft_printf
+intest
+out
+outest
+pipex
+pipex.c
+pipex.h
+pipex.o
+utils
