@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/15 18:37:14 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/18 19:17:06 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char	**parsing(char **env)
 		path = ft_strnstr(env[i], "PATH=", 5);
 		i++;
 	}
+	if (path == NULL)
+		return (NULL);
 	splitz = ft_split(path + 5, ':');
 	i = 0;
 	while (splitz[i])
@@ -38,71 +40,93 @@ char	**parsing(char **env)
 	return (splitz);
 }
 
-void	child_proc(int fd, char *cmd1, char **path, int *pip)
+int	child_proc(int fd, char *cmd1, char **path, int *pip)
 {
 	int		i;
 	int		err;
 	char	*fullpath;
 	char	**cmds;
 
-	i = -1 ;
+	i = 0 ;
+	err = -1 ;
 	cmds = ft_split(cmd1, ' ');
 	dup2(fd, STDIN_FILENO);
 	dup2(pip[1], STDOUT_FILENO);
 	close(pip[0]);
 	close(fd);
-	while (path[++i])
+	if (access(cmd1, X_OK) == 0)
 	{
-		if (access(cmd1, X_OK) == 0)
-			execve(cmd1, cmds, NULL);
-		else
+		execve(cmd1, cmds, NULL);
+	}
+	else if (*cmd1 == '/')
+	{
+		ft_printf("no such file or directory: %s\n", cmd1);
+	}
+	else
+	{
+		while (path[i] && err == -1)
 		{
 			fullpath = ft_strjoin(path[i], cmds[0]);
-			err = execve(fullpath, cmds, NULL);
+			err = access(fullpath, F_OK);
+			if (err == 0)
+				execve(fullpath, cmds, NULL);
 			free(fullpath);
+			i++;
+		}
+		if (err == -1)
+		{
+			ft_printf("command not found: %s\n", cmds[0]);
+			return (err);
 		}
 	}
-	if (err == -1)
-	{
-		perror("first command not found");
-		exit(EXIT_FAILURE);
-	}
 	free_2d(cmds);
+	return (err);
 }
 
-void	parent_proc(int fd, char *cmd2, char **path, int *pip)
+int	parent_proc(int fd, char *cmd2, char **path, int *pip)
 {
 	int		i;
 	int		err;
 	char	*fullpath;
 	char	**cmds;
 
-	i = -1;
+	i = 0;
+	err = -1 ;
 	cmds = ft_split(cmd2, ' ');
 	dup2(fd, STDOUT_FILENO);
 	dup2(pip[0], STDIN_FILENO);
 	close(pip[1]);
 	close(fd);
-	while (path[++i])
+	if (access(cmd2, X_OK) == 0)
 	{
-		if (access(cmd2, X_OK) == 0)
-			execve(cmd2, cmds, NULL);
-		else
+		execve(cmd2, cmds, NULL);
+	}
+	else if (*cmd2 == '/')
+	{
+		ft_printf("no such file or directory: %s\n", cmd2);
+	}
+	else
+	{
+		while (path[i] && err == -1)
 		{
 			fullpath = ft_strjoin(path[i], cmds[0]);
-			err = execve(fullpath, cmds, NULL);
+			err = access(fullpath, F_OK);
+			if (err == 0)
+				execve(fullpath, cmds, NULL);
 			free(fullpath);
+			i++;
+		}
+		if (err == -1)
+		{
+			ft_printf("command not found: %s\n", cmds[0]);
+			return (err);
 		}
 	}
-	if (err == -1)
-	{
-		perror("second command not found");
-		exit(EXIT_FAILURE);
-	}
 	free_2d(cmds);
+	return (err);
 }
 
-void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
+int	pipex(int *fd, char *cmd1, char *cmd2, char **path)
 {
 	pid_t	pid;
 	int		pip[2];
@@ -119,13 +143,17 @@ void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-		child_proc(fd[0], cmd1, path, pip);
+	{
+		if (child_proc(fd[0], cmd1, path, pip) == -1)
+			return (EXIT_FAILURE);
+	}
 	if (pid != 0)
 	{
 		wait(NULL);
-		parent_proc(fd[1], cmd2, path, pip);
+		if (parent_proc(fd[1], cmd2, path, pip) == -1)
+			return (EXIT_FAILURE);
 	}
-	free_2d(path);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int ac, char **av, char **env)
@@ -136,15 +164,28 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 5)
 		return (ft_printf("error 4 arguments are required"));
-	fd[0] = open(av[1], O_RDONLY | O_CREAT, 0644);
+	fd[0] = open(av[1], O_RDONLY);
+	if (fd[0] < 0)
+		return (ft_printf("no such file or directory : %s\n", av[1]));
 	fd[1] = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd[0] < 0 || fd[1] < 0)
-		return (ft_printf("Error opening W/R files"));
+	if (fd[1] < 0)
+		return (ft_printf("no such file or directory : %s\n", av[4]));
 	err[0] = access(av[1], R_OK);
+	if (err[0] == -1)
+		return (ft_printf("permission denied : %s\n", av[1]));
 	err[1] = access(av[4], W_OK | R_OK);
-	if (err[0] == -1 || err[1] == -1)
-		return (ft_printf("file permission W/R denied"));
+	if (err[1] == -1)
+		return (ft_printf("permission denied : %s\n", av[4]));
 	path = parsing(env);
-	pipex(fd, av[2], av[3], path);
+	if (path == NULL)
+	{
+		ft_printf("environnement not found:");
+		exit(1);
+	}
+	if (pipex(fd, av[2], av[3], path) == -1)
+	{
+		free_2d(path);
+		exit (1);
+	}
 	return (EXIT_SUCCESS);
 }

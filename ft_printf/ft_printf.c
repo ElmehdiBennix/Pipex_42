@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 18:45:39 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 20:48:02 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/18 16:10:10 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	ft_printf(const char *str, ...)
 			value += check(str[i], arg);
 		}
 		else
-			value += write (1, &str[i], 1);
+			value += write (2, &str[i], 1);
 			i++;
 	}
 	va_end(arg);

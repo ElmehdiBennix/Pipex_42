@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 15:14:29 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 19:03:46 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/18 14:54:30 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_printchar(char c)
 {
-	write (1, &c, 1);
+	write (2, &c, 1);
 	return (1);
 }
 
@@ -27,7 +27,7 @@ int	ft_printstr(char *c)
 		return (ft_printstr("(null)"));
 	while (c[i])
 	{
-		write (1, &c[i], 1);
+		write (2, &c[i], 1);
 		i++;
 	}
 	return (i);
