@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/20 03:03:42 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/20 03:33:11 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 	dup2(pip[1], STDOUT_FILENO);
 	close(pip[0]);
 	close(fd);
-	if (fd < 0)
+	if (fd != 0)
 	{
 		free_2d(cmds);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	else if (access(cmd1, X_OK) == 0)
 		execve(cmd1, cmds, NULL);
@@ -80,6 +80,7 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 		}
 	}
 	free_2d(cmds);
+	exit(EXIT_FAILURE);
 }
 
 void	parent_proc(int fd, char *cmd2, char **path, int *pip)
@@ -117,6 +118,7 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 		}
 	}
 	free_2d(cmds);
+	exit(EXIT_FAILURE);
 }
 
 void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
@@ -142,7 +144,7 @@ void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
 		wait(NULL);
 		parent_proc(fd[1], cmd2, path, pip);
 		free_2d(path);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 }
 
