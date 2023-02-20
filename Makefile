@@ -6,7 +6,7 @@
 #    By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 21:17:21 by ebennix           #+#    #+#              #
-#    Updated: 2023/02/15 18:38:06 by ebennix          ###   ########.fr        #
+#    Updated: 2023/02/20 03:06:35 by ebennix          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,9 @@ git :
 	git status
 	git commit -m "$(m)"
 	git push
+
+force :
+	git push --force
 
 .PHONY : all clean fclean re git
 
