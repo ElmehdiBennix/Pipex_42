@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 19:05:38 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/19 21:39:59 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/20 04:59:33 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	**free_2d(char **str);
 char	**ft_split(char *s, char c);
+char	**parsing(char **env);
+void	pipex(int *fd, char *cmd1, char *cmd2, char **path);
 
-void     child_proc(int fd, char *cmd1, char **path, int *pip);
-void     parent_proc(int fd, char *cmd2, char **path, int *pip);
-char    **parsing(char **env);
-void pipex(int *fd, char *cmd1, char *cmd2, char **path);
 
 #endif

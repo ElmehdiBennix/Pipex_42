@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 19:01:02 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/20 04:58:38 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,32 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 		i++;
 	}
 	return (NULL);
+}
+
+char	**parsing(char **env)
+{
+	int		i;
+	char	*tmp;
+	char	**splitz;
+	char	*path;
+
+	i = 0;
+	path = NULL;
+	while (env[i] && path == NULL)
+	{
+		path = ft_strnstr(env[i], "PATH=", 5);
+		i++;
+	}
+	if (path == NULL)
+		return (NULL);
+	splitz = ft_split(path + 5, ':');
+	i = 0;
+	while (splitz[i])
+	{
+		tmp = ft_strjoin(splitz[i], "/");
+		free(splitz[i]);
+		splitz[i] = tmp;
+		i++;
+	}
+	return (splitz);
 }

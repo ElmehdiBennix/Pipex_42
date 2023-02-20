@@ -6,55 +6,46 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/20 03:33:11 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/20 04:58:57 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**parsing(char **env)
+static	void	accesspath(char **path, char **cmds)
 {
-	int		i;
-	char	*tmp;
-	char	**splitz;
-	char	*path;
-
-	i = 0;
-	path = NULL;
-	while (env[i] && path == NULL)
-	{
-		path = ft_strnstr(env[i], "PATH=", 5);
-		i++;
-	}
-	if (path == NULL)
-		return (NULL);
-	splitz = ft_split(path + 5, ':');
-	i = 0;
-	while (splitz[i])
-	{
-		tmp = ft_strjoin(splitz[i], "/");
-		free(splitz[i]);
-		splitz[i] = tmp;
-		i++;
-	}
-	return (splitz);
-}
-
-void	child_proc(int fd, char *cmd1, char **path, int *pip)
-{
+	char	*fullpath;
 	int		i;
 	int		err;
-	char	*fullpath;
+
+	i = 0;
+	err = -1;
+	fullpath = NULL;
+	while (path[i] && err == -1)
+	{
+		fullpath = ft_strjoin(path[i], cmds[0]);
+		err = execve(fullpath, cmds, NULL);
+		free(fullpath);
+		i++;
+	}
+	if (err == -1)
+	{
+		ft_printf("command not found: %s\n", cmds[0]);
+		free_2d(cmds);
+		exit(EXIT_FAILURE);
+	}
+}
+
+static	void	child_proc(int fd, char *cmd1, char **path, int *pip)
+{
 	char	**cmds;
 
-	i = 0 ;
-	err = -1 ;
 	cmds = ft_split(cmd1, ' ');
 	dup2(fd, STDIN_FILENO);
 	dup2(pip[1], STDOUT_FILENO);
 	close(pip[0]);
 	close(fd);
-	if (fd != 0)
+	if (fd == -1)
 	{
 		free_2d(cmds);
 		exit(EXIT_FAILURE);
@@ -64,34 +55,15 @@ void	child_proc(int fd, char *cmd1, char **path, int *pip)
 	else if (*cmd1 == '/')
 		ft_printf("no such file or directory: %s\n", cmd1);
 	else
-	{
-		while (path[i] && err == -1)
-		{
-			fullpath = ft_strjoin(path[i], cmds[0]);
-			err = execve(fullpath, cmds, NULL);
-			free(fullpath);
-			i++;
-		}
-		if (err == -1)
-		{
-			ft_printf("command not found: %s\n", cmds[0]);
-			free_2d(cmds);
-			exit(EXIT_FAILURE);
-		}
-	}
+		accesspath(path, cmds);
 	free_2d(cmds);
 	exit(EXIT_FAILURE);
 }
 
-void	parent_proc(int fd, char *cmd2, char **path, int *pip)
+static	void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 {
-	int		i;
-	int		err;
-	char	*fullpath;
 	char	**cmds;
 
-	i = 0;
-	err = -1 ;
 	cmds = ft_split(cmd2, ' ');
 	dup2(fd, STDOUT_FILENO);
 	dup2(pip[0], STDIN_FILENO);
@@ -102,21 +74,7 @@ void	parent_proc(int fd, char *cmd2, char **path, int *pip)
 	else if (*cmd2 == '/')
 		ft_printf("no such file or directory: %s\n", cmd2);
 	else
-	{
-		while (path[i] && err == -1)
-		{
-			fullpath = ft_strjoin(path[i], cmds[0]);
-			err = execve(fullpath, cmds, NULL);
-			free(fullpath);
-			i++;
-		}
-		if (err == -1)
-		{
-			ft_printf("command not found: %s\n", cmds[0]);
-			free_2d(cmds);
-			exit(EXIT_FAILURE);
-		}
-	}
+		accesspath(path, cmds);
 	free_2d(cmds);
 	exit(EXIT_FAILURE);
 }
