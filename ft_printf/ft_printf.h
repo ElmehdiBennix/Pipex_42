@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 18:45:45 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 20:48:47 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/20 05:07:36 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 # include <unistd.h>
 # include <stdarg.h>
 
+
 int	ft_printchar(char c);
 int	ft_printstr(char *c);
 int	ft_printunsigned(unsigned int n);
 int	ft_printnbr(int n);
 int	ft_hex(unsigned int n, char flag);
 int	ft_printf(const char *str, ...);
+
 
 #endif

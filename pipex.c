@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 19:16:08 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/20 04:58:57 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/20 05:18:02 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,22 +108,18 @@ void	pipex(int *fd, char *cmd1, char *cmd2, char **path)
 
 int	main(int ac, char **av, char **env)
 {
-	int		err[3];
 	int		fd[2];
 	char	**path;
 
 	if (ac != 5)
 		return (ft_printf("error 4 arguments are required"));
-	err[0] = access(av[1], R_OK);
-	err[1] = access(av[1], F_OK);
-	err[2] = access(av[4], W_OK | R_OK);
 	fd[0] = open(av[1], O_RDONLY);
 	fd[1] = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (err[1] == -1)
+	if (access(av[1], F_OK) == -1)
 		ft_printf("no such file or directory : %s\n", av[1]);
-	else if (err[0] == -1)
+	else if (access(av[1], R_OK) == -1)
 		ft_printf("permission denied : %s\n", av[1]);
-	if (err[2] == -1)
+	if (access(av[4], W_OK | R_OK) == -1)
 		return (ft_printf("permission denied : %s\n", av[4]));
 	path = parsing(env);
 	if (path == NULL)
