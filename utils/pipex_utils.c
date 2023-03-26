@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 21:17:18 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/20 04:58:38 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/03/26 06:57:22 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ size_t	ft_strlen(const char *str)
 
 	i = 0;
 	if (str == NULL || str[i] == '\0')
-	{
 		return (0);
-	}
 	else
 	{
 		while (str[i] != '\0')
