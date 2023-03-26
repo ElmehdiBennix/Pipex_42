@@ -6,7 +6,7 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 20:52:56 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/14 16:35:47 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/03/26 06:56:50 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,15 @@ static	char	*word_malloc(char *str, char delim)
 
 char	**free_2d(char **str)
 {
-	char	*tab;
 	int		i;
 
-	i = 0;
-	while (str[i] != '\0')
-	{
-		tab = str[i];
-		free(tab);
-		i++;
-	}
+	i = -1;
+	if (!str)
+		return (NULL);
+	while (str[++i])
+		free(str[i]);
 	free(str);
-	str = NULL;
-	return (NULL);
+	return (str);
 }
 
 char	**ft_split(char *str, char delim)
