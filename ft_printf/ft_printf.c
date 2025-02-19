@@ -52,8 +52,10 @@ int	ft_printf(const char *str, ...)
 			value += check(str[i], arg);
 		}
 		else
-			value += write (2, &str[i], 1);
+        {
+            value += write (2, &str[i], 1);
 			i++;
+        }
 	}
 	va_end(arg);
 	return (value);
